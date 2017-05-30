@@ -1,0 +1,37 @@
+{
+  "name": "wp-translations",
+  "version": "1.0.0",
+  "homepage": "https://wp-translations.org/",
+  "bugs": "https://github.com/WP-Translations/wp-translations/issues",
+  "author": [
+    "Sadler Jérôme, WP-Translations (https://sadler-jerome.fr/)"
+  ],
+  "contributors": [
+    "Sadler Jérôme, WP-Translations"
+  ],
+  "description": "Import WP language-packs from transifex",
+  "main": "https://github.com/WP-Translations/wp-translations",
+  "keywords": [
+    "i18n",
+    "transifex",
+    "translation",
+    "wordpress"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/WP-Translations/wp-translations.git"
+  },
+  "license": "GPL-v2",
+  "dependencies": {},
+  "devDependencies": {
+    "gulp": "latest",
+    "gulp-rename": "latest",
+    "gulp-sass": "latest",
+    "gulp-concat": "latest",
+    "gulp-minify-css": "latest",
+    "gulp-autoprefixer": "latest",
+    "gulp-sort": "latest",
+    "gulp-sourcemaps": "latest",
+    "gulp-wp-pot": "latest"
+  }
+}
