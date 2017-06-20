@@ -12,12 +12,12 @@ var wpPot = require( 'gulp-wp-pot' );
 
 // tâche CSS = compile vers style.css et style-unminified.css
 gulp.task('css', function () {
-  return gulp.src('./assets/scss/wpts-admin-style.scss')
+  return gulp.src('./assets/scss/admin-style.scss')
     .pipe(sass({
       outputStyle: 'expanded' // CSS non minifiée plus lisible ('}' à la ligne)
     }))
     .pipe(autoprefixer())
-    .pipe(rename('wpts-admin-style.css'))
+    .pipe(rename('admin-style.css'))
     .pipe(gulp.dest('./assets/css'))
     .pipe(rename('wpts-admin-style-min.css'))
     .pipe(minifycss())
@@ -33,7 +33,7 @@ gulp.task( 'make-pot', function() {
 			domain: "wp-translations",
 			headers: false
 		}))
-		.pipe( gulp.dest( './languages/wp-translations-server.pot' ));
+		.pipe( gulp.dest( './languages/wp-translations.pot' ));
 
 });
 

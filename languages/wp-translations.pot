@@ -1,0 +1,13 @@
+# Copyright (C) 2017 wp-translations
+# This file is distributed under the same license as the wp-translations package.
+msgid ""
+msgstr ""
+"Project-Id-Version: wp-translations\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: wp-translations.php:96, wp-translations.php:108
+msgid "Cheatin&#8217; huh?"
+msgstr ""

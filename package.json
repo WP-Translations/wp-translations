@@ -24,12 +24,12 @@
   "license": "GPL-v2",
   "dependencies": {},
   "devDependencies": {
-    "gulp": "latest",
-    "gulp-rename": "latest",
-    "gulp-sass": "latest",
+    "gulp": "^3.9.1",
+    "gulp-autoprefixer": "latest",
     "gulp-concat": "latest",
     "gulp-minify-css": "latest",
-    "gulp-autoprefixer": "latest",
+    "gulp-rename": "latest",
+    "gulp-sass": "latest",
     "gulp-sort": "latest",
     "gulp-sourcemaps": "latest",
     "gulp-wp-pot": "latest"
