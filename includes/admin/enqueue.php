@@ -19,13 +19,26 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  */
 function wp_translations_enqueue_admin_assets() {
 
+	$themes_translations = array();
+	$themes_updates = get_site_transient( 'update_themes' );
+
+	foreach ( $themes_updates->translations as $theme ) {
+		$themes_translations[ $theme['slug'] ]['updates'][] = $theme['language'];
+	}
+
 	$current_screen = get_current_screen();
+	$allowed_screens = array(
+		'plugins',
+		'themes'
+	);
 	$css_ext = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '.css' : '.min.css';
 	$js_ext  = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '.js' : '.min.js';
 
 	$wpt_update_data = array(
 		'ajaxurl' => admin_url( 'admin-ajax.php' ),
-		'nonce'		=> wp_create_nonce( 'wpt-update-nonce' )
+		'nonce'		=> wp_create_nonce( 'wpt-update-nonce' ),
+		'themes_translations' => $themes_translations,
+		'update_message' => esc_html__( 'New translations are available:&nbsp;', 'wp-translations' )
 	);
 
 	wp_register_script(
@@ -36,7 +49,7 @@ function wp_translations_enqueue_admin_assets() {
 		false
 	);
 
-	if ( isset( $current_screen ) && 'plugins' === $current_screen->id ) {
+	if ( isset( $current_screen ) && in_array( $current_screen->id, $allowed_screens ) ) {
 		wp_enqueue_script( 'wp-translations-admin-script' );
 		wp_localize_script( 'wp-translations-admin-script', 'wpt_update_ajax', $wpt_update_data );
 	}

@@ -1,6 +1,27 @@
 jQuery( function( $ ) {
 
 	$( function() {
+
+		$( '.theme' ).each( function() {
+
+				var slug = $(this).attr('data-slug');
+
+				if( wpt_update_ajax.themes_translations.hasOwnProperty( slug ) ) {
+
+					var langs = wpt_update_ajax['themes_translations'][''+slug+'']['updates'] + ' <button id="wp-translations-update-' + slug + '" class="button-link" type="button" data-type="themes" data-slug="' + slug + '">Update now</button>';
+					if ( $( '.theme[data-slug="'+ slug +'"] .notice' ).length ) {
+						$( '.theme[data-slug="'+ slug +'"] .notice').append( '<p>' + wpt_update_ajax.update_message + ' ' + langs + '</p>' );
+					} else {
+						$( '.theme[data-slug="'+ slug +'"]').append('<div class="update-message notice inline notice-warning notice-alt"><p>' +  wpt_update_ajax.update_message + '' + langs + '</p></div>');
+					}
+
+				}
+
+		});
+
+	});
+
+	$( function() {
 		$( '.wp-translations-update-row' ).each( function() {
 
 			var list = $( this );
@@ -13,7 +34,7 @@ jQuery( function( $ ) {
 		e.preventDefault();
 
 		var slug = $(this).attr('data-slug');
-
+		var type = $(this).attr('data-type');
 
     $.ajax({
 			type: "POST",
@@ -22,16 +43,21 @@ jQuery( function( $ ) {
 				'action': 'wp_translations_update_translations',
 				'nonce': wpt_update_ajax.nonce,
 				'slug' : slug,
+				'type' : type,
 			},
 			beforeSend: function(reponse) {
-				$( 'tr[data-slug="'+ slug +'"]' ).addClass('updated');
-				$( 'tr[data-slug="'+ slug +'"] .notice' ).addClass( 'updating-message' );
+				if( 'plugins' == type ) {
+					$( '[data-slug="'+ slug +'"]' ).addClass('updated');
+				}
+				$( '[data-slug="'+ slug +'"] .notice' ).addClass( 'updating-message' );
 			},
 	  })
 
     .done( function( response, textStatus, jqXHR ) {
-			$( 'tr[data-slug="'+ slug +'"]' ).removeClass('updated');
-			$( 'tr[data-slug="'+ slug +'"] .notice' ).removeClass( 'notice-warning updating-message' ).addClass( 'updated-message notice-success' ).html( response );
+			if( 'plugins' == type ) {
+				$( '[data-slug="'+ slug +'"]' ).removeClass('updated');
+			}
+			$( '[data-slug="'+ slug +'"] .notice' ).removeClass( 'notice-warning updating-message' ).addClass( 'updated-message notice-success' ).html( response );
 		});
 
 	});

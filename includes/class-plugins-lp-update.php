@@ -98,7 +98,7 @@ class WP_Translations_Plugins_LP_Update {
 		$status 			= ( is_plugin_active( $this->file ) ) ? 'active' : 'inactive';
 		$count_lp 		= count( $languages );
 		$message 			= esc_html__( 'New translations are available:&nbsp;', 'wp-translations' );
-		$update_link	= '<a href="#" id="wp-translations-update-' . $this->slug . '" data-slug="' . $this->slug . '">Update now</a>';
+		$update_link	= '<button id="wp-translations-update-' . $this->slug . '" class="button-link" type="button" data-type="plugins" data-slug="' . $this->slug . '">Update now</button>';
 
 		echo '<tr class="plugin-update-tr ' . $status . ' wp-translations-update-row" id="' . $this->slug . '-update" data-slug="' . $this->slug . '" data-plugin="' . $file . '">';
 		echo '<td colspan="3" class="plugin-update colspanchange">';

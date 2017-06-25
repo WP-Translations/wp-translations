@@ -78,6 +78,7 @@ final class WP_Translations {
 			register_deactivation_hook( __FILE__, array( self::$instance, 'deactivation' ) );
 
 			add_action( 'init', array( self::$instance, 'translations_plugins_update' ) );
+			add_action( 'init', array( self::$instance, 'translations_themes_update' ) );
 		}
 
 		return self::$instance;
@@ -160,6 +161,7 @@ final class WP_Translations {
 		require_once WP_TRANSLATIONS_PLUGIN_DIR . 'vendor/autoload.php';
 		require_once WP_TRANSLATIONS_PLUGIN_DIR . 'includes/admin/register-settings.php';
 		require_once WP_TRANSLATIONS_PLUGIN_DIR . 'includes/class-plugins-lp-update.php';
+		require_once WP_TRANSLATIONS_PLUGIN_DIR . 'includes/class-themes-lp-update.php';
 		require_once WP_TRANSLATIONS_PLUGIN_DIR . 'includes/admin/enqueue.php';
 		require_once WP_TRANSLATIONS_PLUGIN_DIR . 'includes/admin/ajax-updates.php';
 
@@ -239,6 +241,30 @@ final class WP_Translations {
 			if( in_array( $key, $domains ) ) {
 				foreach ( $project as $resource_slug => $resource ) {
 					$update = new WP_Translations_Plugins_LP_Update( $resource_slug, $key, $plugins[ $key ] );
+				}
+			}
+		}
+
+	}
+
+	public function translations_themes_update() {
+
+		if ( ! function_exists( 'get_plugins' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		}
+
+		$projects_list = wp_remote_get( 'https://raw.githubusercontent.com/WP-Translations/language-packs/master/wpts-projects.json' );
+		$projects = json_decode( wp_remote_retrieve_body( $projects_list ) );
+
+		$themes = wp_get_themes();
+		foreach ( $themes as $key => $theme ) {
+			$themes[ $key ] = $theme->get( 'TextDomain' );
+		}
+
+		foreach ( $projects as $key => $project ) {
+			if( in_array( $key, $themes ) ) {
+				foreach ( $project as $resource_slug => $resource ) {
+					$update = new WP_Translations_Themes_LP_Update( $resource_slug, $key );
 				}
 			}
 		}

@@ -299,43 +299,30 @@ function wpts_settings_section_cb() {
 // field content cb
 function wpts_settings_field_cb() {
 
+	$transient = new stdClass;
   $updates = array();
+
 	require_once( ABSPATH . 'wp-admin/includes/translation-install.php' );
 	$locales = get_available_languages();
 	$locales = ! empty( $locales ) ? $locales : array( get_locale() );
 
-	$plugins_updates = get_option('_site_transient_update_plugins');
+	$themes_updates = get_site_transient('update_themes');
 
 	$projects_list = wp_remote_get( 'https://raw.githubusercontent.com/WP-Translations/language-packs/master/wpts-projects.json' );
 	$projects = json_decode( wp_remote_retrieve_body( $projects_list ) );
 
-	$plugins_active = get_plugins();
-	$themes 				= array_keys( wp_get_themes() );
-	foreach ( $themes as $key => $theme ) {
-		$theme = wp_get_theme( $theme );
-		$themes_domain[] = array(
-			'slug'			 => $key,
-			'TextDomain' => $theme->get( 'TextDomain' )
-		);
+	$themes 				= wp_prepare_themes_for_js();
+	/*foreach ( $themes as $key => $theme ) {
+		$themes[ $key ] = $theme->get( 'TextDomain' );
 	}
-	$themes_domains	= wp_list_pluck( $themes_domain, 'TextDomain', 'slug' );
-	$plugins 				= wp_list_pluck( $plugins_active, 'TextDomain' );
-	$plugins_data   = array();
-		foreach ( $plugins_active as $key => $plugin ) {
-				$plugins_data[ $key ] = array(
-				'name' => $plugin['Name'],
-				'textdomain' => $plugin['TextDomain'],
-				'file' => $key
-			);
-		}
 
-	$local_projects = array_merge( $plugins, $themes_domains );
+	$translations = wp_get_installed_translations( 'themes' );
 
 	foreach ( $projects as $key => $project ) {
-		if( in_array( $key, $local_projects ) ) {
-
+		if( in_array( $key, $themes ) ) {
 			foreach ( $project as $resource_slug => $resource ) {
 
+				echo $resource_slug . '<br>';
 
 				$remote_lp = wp_remote_get( 'https://raw.githubusercontent.com/WP-Translations/language-packs/master/' . $resource_slug . '/language-pack.json' );
 				$remote_lp_json = json_decode( wp_remote_retrieve_body( $remote_lp ) );
@@ -344,42 +331,36 @@ function wpts_settings_field_cb() {
 
 					if ( in_array( $locale, array_keys( (array) $remote_lp_json ) ) ) {
 
-						if ( 'plugin' == $remote_lp_json->{$locale}->type ) {
-							$translations = wp_get_installed_translations( 'plugins' );
+						$lang_pack_mod = isset( $remote_lp_json->{$locale}->updated )
+							? strtotime( substr( $remote_lp_json->{$locale}->updated, 0, -3 ) )
+							: 0;
+
+							echo 'remote: ' . $lang_pack_mod;
+
+						$translation_mod = isset( $translations[ $resource_slug ][ $locale ] )
+							? strtotime( substr( $translations[ $resource_slug ][ $locale ]['PO-Revision-Date'],0 ,-5 ) )
+							: 0;
+
+							echo 'locale: ' . $translation_mod;
+
+						if ( $lang_pack_mod > $translation_mod ) {
+							$transient->translations[] = (array) $remote_lp_json->{$locale};
 						}
-						if ( 'theme' === $remote_lp_json->{$locale}->type ) {
-							$translations = wp_get_installed_translations( 'themes' );
-						}
-
-							$lang_pack_mod = isset( $remote_lp_json->{$locale}->updated )
-								? substr( $remote_lp_json->{$locale}->updated, 0, -3 )
-								: 0;
-
-								echo 'remote ' . $resource_slug . '-' . $locale . ' : ' . $lang_pack_mod . '<br/>';
-
-							$translation_mod = isset( $translations[ $resource_slug ][ $locale ] )
-								? substr( $translations[ $resource_slug ][ $locale ]['PO-Revision-Date'],0 ,-5 )
-								: 0;
-
-								echo 'local ' . $resource_slug . '-' . $locale . ' : ' . $translation_mod . '<hr/>';
-
-							if ( $lang_pack_mod > $translation_mod ) {
-								$updates[] = (array) $remote_lp_json->{$locale};
-							}
-
-						//}
 
 					}
 
 				}
-
 			}
-
 		}
+	}*/
+
+	$transient->last_checked = current_time( 'timestamp' );
+	if( ! empty( $transient->translations ) ) {
+		$transient->translations = array_unique( $transient->translations, SORT_REGULAR );
 	}
 
 	echo '<pre>';
-		print_r( $plugins_updates );
+		print_r($themes_updates);
 	echo '</pre>';
 
 }

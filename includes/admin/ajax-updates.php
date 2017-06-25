@@ -18,6 +18,7 @@ function wp_translations_update_translations() {
 		wp_die( esc_html__( 'Cheatin&#8217; uh?&nbsp;:&nbsp;', 'wp-translations' ) );
 	}
 	$slug = esc_attr( $_POST['slug'] );
+	$type = esc_attr( $_POST['type'] );
 
 
 	include_once( ABSPATH . '/wp-admin/includes/class-wp-upgrader.php' );
@@ -37,7 +38,9 @@ function wp_translations_update_translations() {
 	$upgrader_args = array( 'url' => '', 'nonce' => '', 'title' => __( 'Translations' ), 'skip_header_footer' => true );
 	$upgrader = new Language_Pack_Upgrader( new Language_Pack_Upgrader_Skin( $upgrader_args ) );
 	$all_language_updates = wp_get_translation_updates();
-	$transient = get_site_transient( 'update_plugins' );
+
+	$transient_type = 'update_' . $type;
+	$transient = get_site_transient( $transient_type );
 
 	$language_updates = array();
 	foreach ( $all_language_updates as $current_language_update ) {
@@ -53,7 +56,7 @@ function wp_translations_update_translations() {
 			unset( $transient->translations[ $key ] );
 		}
 	}
-	$transient = set_site_transient( 'update_plugins', $transient );
+	$transient = set_site_transient( $transient_type, $transient );
 
 	if ( empty( $result ) ) {
 		esc_html_e( 'Translations failed to update.', 'wp-translations' );
