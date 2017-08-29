@@ -10,7 +10,9 @@
  */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 function wp_translations_update_translations() {
 
@@ -19,7 +21,6 @@ function wp_translations_update_translations() {
 	}
 	$slug = esc_attr( $_POST['slug'] );
 	$type = esc_attr( $_POST['type'] );
-
 
 	include_once( ABSPATH . '/wp-admin/includes/class-wp-upgrader.php' );
 	if ( file_exists( ABSPATH . '/wp-admin/includes/screen.php' ) ) {
@@ -35,7 +36,12 @@ function wp_translations_update_translations() {
 
 	include_once( ABSPATH . 'wp-admin/includes/class-wp-upgrader.php' );
 
-	$upgrader_args = array( 'url' => '', 'nonce' => '', 'title' => __( 'Translations' ), 'skip_header_footer' => true );
+	$upgrader_args = array(
+		'url' => '',
+		'nonce' => '',
+		'title' => __( 'Translations' ),
+		'skip_header_footer' => true,
+	);
 	$upgrader = new Language_Pack_Upgrader( new Language_Pack_Upgrader_Skin( $upgrader_args ) );
 	$all_language_updates = wp_get_translation_updates();
 
@@ -44,27 +50,34 @@ function wp_translations_update_translations() {
 
 	$language_updates = array();
 	foreach ( $all_language_updates as $current_language_update ) {
-		if ( $current_language_update->slug == $slug ) {
+		if ( $current_language_update->slug === $slug ) {
 			$language_updates[] = $current_language_update;
 		}
 	}
 
-	$result = count( $language_updates ) == 0 ? false : $upgrader->bulk_upgrade( $language_updates );
+	$result = count( $language_updates ) === 0 ? false : $upgrader->bulk_upgrade( $language_updates );
 
 	foreach ( $transient->translations as $key => $update ) {
-		if( $update['slug'] == $slug ) {
+		if ( $update['slug'] === $slug ) {
 			unset( $transient->translations[ $key ] );
 		}
 	}
 	$transient = set_site_transient( $transient_type, $transient );
 
-	if ( empty( $result ) ) {
-		esc_html_e( 'Translations failed to update.', 'wp-translations' );
-	}
+	$count_items = ( count( $language_updates ) > 1 ) ? ( count( $language_updates ) - 1 ) : count( $language_updates );
 
-	$data = array(
-		'updates' => $language_updates
-	);
+	if ( count( $language_updates ) > 1 ) {
+		for ( $i = 0; $i < $count_items; $i++ ) {
+			echo '<script type="text/javascript">
+					(function( wp ) {
+						if ( wp && wp.updates.decrementCount ) {
+							wp.updates.decrementCount( "translation" );
+						}
+					})( window.wp );
+
+				</script>';
+		}
+	}
 
 	die();
 }
