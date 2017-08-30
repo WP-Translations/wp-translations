@@ -41,8 +41,8 @@ class WP_Translations_List_Table extends \WP_List_Table {
 	function column_default( $item, $column_name ) {
 
 		switch ( $column_name ) {
-			case 'Name':
-				return $item->Name;
+			case 'name':
+				return $item->name;
 
 			default:
 				return isset( $item->$column_name ) ? $item->$column_name : '';
@@ -57,11 +57,11 @@ class WP_Translations_List_Table extends \WP_List_Table {
 	function get_columns() {
 		$columns = array(
 			'cb'          => '<input type="checkbox" />',
-			'Name'        => __( 'Name', 'wp-translations' ),
+			'name'        => __( 'Name', 'wp-translations' ),
 			'type'        => __( 'Translations Type', 'wp-translations' ),
 			'textdomain'  => __( 'Text Domain', 'wp-translations' ),
 			'updates'     => __( 'Updates', 'wp-translations' ),
-			'actions'     => __( 'Actions', 'wp-translations' ),
+
 		);
 
 		return $columns;
@@ -74,13 +74,13 @@ class WP_Translations_List_Table extends \WP_List_Table {
 	 *
 	 * @return string
 	 */
-	function column_Name( $item ) {
+	function column_name( $item ) {
 
 			$actions           = array();
-			//$actions['inline']   = '<a href="#" class="editinline" data-id="' . $item->id  . '" title="' . $item->Name  . '">' .  __( 'Edit this item', 'wp-translations' ) .'</a>';
+			$actions['edit']   = '<a href="' . add_query_arg( array( 'wp-translations-action' => 'edit_translation', 'textdomain' => $item->textdomain ) ) . '" class="editinline" data-id="' . esc_attr( $item->id ) . '" title="' . esc_html( $item->name ) . '">' . esc_html__( 'Edit', 'wp-translations' ) . '</a>';
 			//$actions['delete'] = sprintf( '<a href="%s" class="submitdelete" data-id="%d" title="%s">%s</a>', admin_url( 'admin.php?page=wp-translations&action=delete&id=' . $item->id ), $item->id, __( 'Delete this item', 'wp-translations' ), __( 'Delete', 'wp-translations' ) );
 
-			return sprintf( '<strong>%1$s</strong> %2$s', $item->Name, $this->row_actions( $actions ) );
+			return sprintf( '<strong>%1$s</strong> %2$s', $item->name, $this->row_actions( $actions ) );
 	}
 
 	/**
@@ -112,18 +112,6 @@ class WP_Translations_List_Table extends \WP_List_Table {
 		}
 
 		return $type;
-	}
-
-	/**
-	 * Render the designation name column
-	 *
-	 * @param  object  $item
-	 *
-	 * @return string
-	 */
-	function column_actions( $item ) {
-		$actions = '<button class="button wp-translations-button wp-translations-edit-rule" data-name="' . esc_attr( $item->Name ) . '" data-id="' . esc_attr( $item->id ) . '">' . esc_html__( 'Edit','wp-translations' ) . '</button>';
-		return $actions;
 	}
 
 	/**
@@ -177,23 +165,6 @@ class WP_Translations_List_Table extends \WP_List_Table {
 	}
 
 	/**
-	 * Set the views
-	 *
-	 * @return array
-	 */
-	public function get_views_() {
-		$status_links   = array();
-		$base_link      = admin_url( 'admin.php?page=sample-page' );
-
-		foreach ( $this->counts as $key => $value ) {
-			$class = ( $key === $this->page_status ) ? 'current' : 'status-' . $key;
-			$status_links[ $key ] = sprintf( '<a href="%s" class="%s">%s <span class="count">(%s)</span></a>', add_query_arg( array( 'status' => $key ), $base_link ), $class, $value['label'], $value['count'] );
-		}
-
-		return $status_links;
-	}
-
-	/**
 	 * Prepare the class items
 	 *
 	 * @return void
@@ -205,7 +176,7 @@ class WP_Translations_List_Table extends \WP_List_Table {
 		$sortable              = $this->get_sortable_columns();
 		$this->_column_headers = array( $columns, $hidden, $sortable );
 
-		$per_page              = 20;
+		$per_page              = -1;
 		$current_page          = $this->get_pagenum();
 		$offset                = ( $current_page - 1 ) * $per_page;
 		$this->page_status     = isset( $_GET['status'] ) ? sanitize_text_field( $_GET['status'] ) : '2';
@@ -231,8 +202,12 @@ class WP_Translations_List_Table extends \WP_List_Table {
 
 	public function single_row( $item ) {
 		global $l10n;
-		$class = ( 1 === is_textdomain_loaded( $item->textdomain ) ) ? 'active' : '';
-		echo '<tr id="domain-' . absint( $item->id ) . '" class="' . esc_attr( $class ) . '">';
+		if ( 0 < count( $item->updates ) ) {
+			$class = 'warning';
+		} else {
+			$class = ( 1 == is_textdomain_loaded( $item->textdomain ) ) ? 'active' : '';
+		}
+		echo '<tr id="domain-' . esc_attr( $item->id ) . '" class="' . esc_attr( $class ) . '">';
 			$this->single_row_columns( $item );
 		echo '</tr>';
 	}

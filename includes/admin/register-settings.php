@@ -30,40 +30,11 @@ function wp_translations_admin_page() {
 add_action( 'admin_menu', 'wp_translations_admin_page' );
 
 function wp_translations_admin_output() {
-	?>
-	<div class="wrap">
-		<h2><?php esc_html_e( 'Translations', 'wp-translations' ); ?></h2>
-		<?php
-		settings_errors();
-		$active_tab = isset( $_GET['tab'] ) ? $_GET['tab'] : 'translations';
-		?>
 
-		 <div class="js-tabs">
+	if ( isset( $_GET['wp-translations-action'] ) && 'edit_translation' == $_GET['wp-translations-action'] ) {
+		require_once WP_TRANSLATIONS_PLUGIN_DIR . '/templates/edit-translation.php';
+	} else {
+		require_once WP_TRANSLATIONS_PLUGIN_DIR . '/templates/list-translation.php';
+	}
 
-			<ul class="nav-tab-wrapper js-tablist">
-				<li class="js-tablist__item"><a href="#translations-tab" id="label_translations-tab" class="js-tablist__link nav-tab"><?php esc_html_e( 'Translations', 'wp-translations' ); ?></a></li>
-				<li class="js-tablist__item"><a href="#repositories-tab" id="label_repositories-tab" class="js-tablist__link nav-tab"><?php esc_html_e( 'Repositories', 'wp-translations' ); ?></a></li>
-			</ul>
-
-
-			<div id="translations-tab" class="js-tabcontent">
-				<form method="post">
-						<input type="hidden" name="page" value="ttest_list_table">
-
-						<?php
-						$list_table = new WP_Translations_List_Table();
-						$list_table->prepare_items();
-						$list_table->search_box( 'search', 'search_id' );
-						$list_table->display();
-						?>
-				</form>
-			</div>
-
-			<div id="repositories-tab" class="js-tabcontent">
-				<h2>Repositories</h2>
-			</div>
-
-		</div><!-- js-tabs -->
-	</div><!-- .wrap -->
-	<?php
 }

@@ -15,17 +15,17 @@ function wp_translations_get_all_translation( $args = array() ) {
 		$updates = wp_get_translation_updates( 'plugins' );
 		$plugins_updates = array();
 		foreach ( $updates as $update ) {
-			if ( $plugin['TextDomain'] == $update->slug ) {
+			if ( $plugin['TextDomain'] === $update->slug ) {
 				$plugins_updates[] = $update;
 			}
 		}
 
 		$data[] = (object) array(
-			'id'	=> $i++,
-			'Name' => $plugin['Name'],
+			'id'         => $i++,
+			'name'       => $plugin['Name'],
 			'textdomain' => $plugin['TextDomain'],
-			'type' => 'plugin',
-			'updates' => $plugins_updates
+			'type'       => 'plugin',
+			'updates'    => $plugins_updates,
 		);
 	}
 
@@ -35,14 +35,14 @@ function wp_translations_get_all_translation( $args = array() ) {
 		$updates = wp_get_translation_updates( 'themes' );
 		$themes_updates = array();
 		foreach ( $updates as $update ) {
-			if ( $theme_data->get( 'TextDomain' ) == $update->slug ) {
+			if ( $theme_data->get( 'TextDomain' ) === $update->slug ) {
 				$themes_updates[] = $update;
 			}
 		}
 
 		$data[] = (object) array(
 			'id' => $i++,
-			'Name' => $theme_data->get( 'Name' ),
+			'name' => $theme_data->get( 'Name' ),
 			'textdomain' => $theme_data->get( 'TextDomain' ),
 			'type' => 'theme',
 			'updates' => $themes_updates,
@@ -58,7 +58,7 @@ function wp_translations_get_all_translation( $args = array() ) {
  * @return array
  */
 function wp_translations_get_translation_count() {
-    $count = count( wp_translations_get_all_translation() );
+		$count = count( wp_translations_get_all_translation() );
 }
 
 /**
@@ -69,7 +69,7 @@ function wp_translations_get_translation_count() {
  * @return array
  */
 function wp_translations_get_translation( $id = 0 ) {
-    global $wpdb;
+		global $wpdb;
 
-    return $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . 'translations WHERE id = %d', $id ) );
+		return $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . 'translations WHERE id = %d', $id ) );
 }

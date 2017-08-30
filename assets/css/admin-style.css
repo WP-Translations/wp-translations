@@ -9,6 +9,17 @@
           box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.1);
 }
 
+.translations .warning th.check-column {
+  border-left: 4px solid #ffb900;
+}
+
+.translations .warning td,
+.translations .warning th {
+  background-color: #fff8e5;
+  -webkit-box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+          box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+}
+
 .translations .inline-edit-row {
   background-color: #f9f9f9;
   -webkit-box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.1);
@@ -32,34 +43,21 @@
   z-index: 26;
 }
 
+.translations .update-plugins.count-0 {
+  background-color: #ccc;
+  color: #111;
+}
+
 .translations span.update-plugins span {
   display: block;
   padding: 0 6px;
 }
 
-.toplevel_page_wp-translations-admin .nav-tab-wrapper {
-  padding-top: 0;
-  margin-bottom: 2em;
+.toplevel_page_wp-translations-admin .dashicons {
+  vertical-align: bottom;
 }
 
-.wp-translations-button:before {
-  display: inline-block;
+.toplevel_page_wp-translations-admin .button-secondary .dashicons {
   vertical-align: middle;
-  padding-bottom: 3px;
-  font-family: "dashicons";
-  font-size: 16px;
-}
-
-.wp-translations-edit-rule:before {
-  content: "\f111";
-}
-
-.js-tabcontent[aria-hidden=true] {
-  display: none;
-}
-
-.nav-tab[aria-seleted=true] {
-  border-bottom: 1px solid #f1f1f1;
-  background: #f1f1f1;
-  color: #000;
+  margin-top: -2px;
 }

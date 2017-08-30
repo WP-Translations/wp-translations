@@ -46,52 +46,19 @@ jQuery( function( $ ) {
 				'type' : type,
 			},
 			beforeSend: function(reponse) {
-				if( 'plugins' == type ) {
+
 					$( '[data-slug="'+ slug +'"]' ).addClass('updated');
-				}
-				$( '[data-slug="'+ slug +'"] .wp-translations-notice' ).addClass( 'updating-message' );
+					$( '[data-slug="'+ slug +'"] .notice' ).addClass( 'updating-message' );
+
 			},
 		})
 
 		.done( function( response, textStatus, jqXHR ) {
-			if( 'plugins' == type ) {
+
 				$( '[data-slug="'+ slug +'"]' ).removeClass('updated');
-			}
-			$( '[data-slug="'+ slug +'"] .wp-translations-notice' ).removeClass( 'notice-warning updating-message' ).addClass( 'updated-message notice-success' ).html( response );
+				$( '[data-slug="'+ slug +'"] .notice' ).removeClass( 'notice-warning updating-message' ).addClass( 'updated-message notice-success' ).html( response );
+
 		});
-
-	});
-
-	$( ".wp-translations-edit-rule" ).live( "click", function(e) {
-		e.preventDefault();
-
-		var id = $(this).attr('data-id');
-		var name = $(this).attr('data-name');
-
-		$.ajax({
-			type: "POST",
-			url: wpt_update_ajax.ajaxurl,
-			data: {
-				'action': 'wp_translations_quick_edit_form',
-				'nonce': wpt_update_ajax.nonce,
-				'id': id,
-				'name': name,
-			},
-		})
-
-		.done( function( response, textStatus, jqXHR ) {
-
-			$( '#domain-' + id ).after("<tr class='inline-edit-row inline-edit-row-page inline-edit-page quick-edit-row quick-edit-row-page inline-edit-page inline-editor'><td class='colspanchange' colspan='5'>" + response + "</td></tr>");
-			$( '#domain-' + id ).hide();
-		});
-	});
-
-	$( ".wp-translations-inline-cancel" ).live( "click", function(e) {
-		e.preventDefault();
-		var id = $(this).attr('data-id');
-
-		$( '.inline-edit-row' ).remove();
-		$( '#domain-' + id ).show();
 
 	});
 

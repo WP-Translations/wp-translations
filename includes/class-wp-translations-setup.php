@@ -142,20 +142,20 @@ if ( ! class_exists( 'WP_Translations_Setup', false ) ) :
 						$checkbox_id = 'checkbox_' . md5( 'lp_' . $update['slug'] );
 						switch ( $update['type'] ) {
 							case 'core':
-								$type = '<span class="dashicons dashicons-wordpress"></span> ';
-								$type .= __( 'Core', 'wp-translations' );
+								/* translators: Icon type. */
+								$type = sprintf( esc_html__( '%s Core', 'wp-translations' ), '<span class="dashicons dashicons-wordpress"></span>' );
 								$data_type = $update['type'];
 								break;
 
 							case 'plugin':
-								$type = '<span class="dashicons dashicons-admin-plugins"></span> ';
-								$type .= __( 'Plugin', 'wp-translations' );
+								/* translators: Icon type. */
+								$type = sprintf( esc_html__( '%s Plugin', 'wp-translations' ), '<span class="dashicons dashicons-admin-plugins"></span>' );
 								$data_type = $update['type'] . 's';
 								break;
 
 							case 'theme':
-								$type = '<span class="dashicons dashicons-admin-appearance"></span> ';
-								$type .= __( 'Theme', 'wp-translations' );
+								/* translators: Icon type. */
+								$type = sprintf( esc_html__( '%s Theme', 'wp-translations' ), '<span class="dashicons dashicons-admin-appearance"></span>' );
 								$data_type = $update['type'] . 's';
 								break;
 						}
@@ -169,7 +169,7 @@ if ( ! class_exists( 'WP_Translations_Setup', false ) ) :
 							<td class="plugin-title"><p>
 								<strong><?php echo esc_attr( $update['slug'] ); ?></strong>
 							</p></td>
-							<td><?php echo esc_html( $type ); ?></td>
+							<td><?php echo wp_kses_post( (string) $type ); ?></td>
 							<td><?php echo esc_html( $update['locales'] ); ?></td>
 							<td><button id="wp-translations-update-<?php echo esc_attr( $update['slug'] ); ?>" class="button-link button wp-translations-to-update" type="button" data-type="<?php echo esc_attr( $data_type ); ?>" data-slug="<?php echo esc_attr( $update['slug'] ); ?>"><?php esc_html_e( 'Update now', 'wp-translations' ); ?></button><div id="wp-translations-update-result-<?php echo esc_attr( $update['slug'] ); ?>" class="screen-reader-text"></div></td>
 						</tr>
