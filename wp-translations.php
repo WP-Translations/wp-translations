@@ -2,10 +2,10 @@
 
 /**
  * Plugin Name: WP-Translations
- * Plugin URI: https://wp-translations.org
- * Description: Import WP language-packs from transifex.
+ * Plugin URI: https://wp-translations.pro
+ * Description: Import WP language packs from transifex.
  * Author: WP-Translations Team
- * Author URI: https://wp-translations.org
+ * Author URI: https://wp-translations.pro
  * Version: 1.0.0
  * Text Domain: wp-translations
  * Domain Path: languages
