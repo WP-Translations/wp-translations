@@ -108,7 +108,7 @@ if ( ! class_exists( 'WP_Translations_Setup', false ) ) :
 
 			foreach ( $translations as $slug => $type ) {
 				if ( 'theme' === $type && is_multisite() ) {
-					$notification = new WP_Translations_Themes_Notification( $slug, $themes[ $slug ] );
+					$notification = new WP_Translations_Themes_Notification( $slug, $themes[ $slug ]->get( 'TextDomain' ) );
 				}
 			}
 
