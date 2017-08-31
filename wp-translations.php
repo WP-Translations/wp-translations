@@ -161,6 +161,7 @@ if ( ! class_exists( 'WP_Translations' ) ) :
 			require_once WP_TRANSLATIONS_PLUGIN_DIR . 'includes/class-wp-translations-plugins-lp-update.php';
 			require_once WP_TRANSLATIONS_PLUGIN_DIR . 'includes/class-wp-translations-plugins-notification.php';
 			require_once WP_TRANSLATIONS_PLUGIN_DIR . 'includes/class-wp-translations-themes-lp-update.php';
+			require_once WP_TRANSLATIONS_PLUGIN_DIR . 'includes/class-wp-translations-themes-notification.php';
 			require_once WP_TRANSLATIONS_PLUGIN_DIR . 'includes/admin/enqueue.php';
 			require_once WP_TRANSLATIONS_PLUGIN_DIR . 'includes/admin/ajax-updates.php';
 			require_once WP_TRANSLATIONS_PLUGIN_DIR . 'includes/admin/ajax-translations.php';
