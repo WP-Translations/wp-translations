@@ -15,19 +15,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 function wp_translations_admin_page() {
+	$capability = is_multisite() ? 'manage_network' : 'manage_options';
 	$updates = absint( count( wp_get_translation_updates() ) );
 	add_menu_page(
 		'Translations',
 		/* translators: Number of plugins updates */
 		sprintf( esc_html__( 'Translations %s', 'wp-translations' ), '<span class="update-plugins count-' . esc_attr( $updates ) . '"><span class="plugin-count">' . number_format_i18n( $updates ) . '</span></span>' ),
-		'manage_options',
+		$capability,
 		'wp-translations-admin',
 		'wp_translations_admin_output',
 		'dashicons-translation',
 		72
 	);
 }
-add_action( 'admin_menu', 'wp_translations_admin_page' );
+add_action( is_multisite() ? 'network_admin_menu' : 'admin_menu', 'wp_translations_admin_page' );
 
 function wp_translations_admin_output() {
 
