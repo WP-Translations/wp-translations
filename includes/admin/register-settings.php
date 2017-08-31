@@ -33,6 +33,8 @@ function wp_translations_admin_output() {
 
 	if ( isset( $_GET['wp-translations-action'] ) && 'edit_translation' == $_GET['wp-translations-action'] ) {
 		require_once WP_TRANSLATIONS_PLUGIN_DIR . '/templates/edit-translation.php';
+	} elseif ( isset( $_GET['wp-translations-action'] ) && 'settings_translation' == $_GET['wp-translations-action'] ) {
+		require_once WP_TRANSLATIONS_PLUGIN_DIR . '/templates/settings-translation.php';
 	} else {
 		require_once WP_TRANSLATIONS_PLUGIN_DIR . '/templates/list-translation.php';
 	}

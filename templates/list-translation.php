@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 ?>
 <div class="wrap">
-	<h2><?php esc_html_e( 'All Translations', 'wp-translations' ); ?> - <a href="<?php echo esc_url( add_query_arg( array( 'wp-translations-action' => 'edit_settings' ) ) ); ?>" class="add-new-h2"><span class="dashicons dashicons-admin-generic"></span> <?php _e( 'Settings', 'wp-translations' ); ?></a></h2>
+	<h2><?php esc_html_e( 'All Translations', 'wp-translations' ); ?> - <a href="<?php echo esc_url( add_query_arg( array( 'wp-translations-action' => 'settings_translation' ) ) ); ?>" class="add-new-h2"><span class="dashicons dashicons-admin-generic"></span> <?php _e( 'Settings', 'wp-translations' ); ?></a></h2>
 	<?php	settings_errors(); ?>
 	<div id="translations-tab">
 	<form method="post">

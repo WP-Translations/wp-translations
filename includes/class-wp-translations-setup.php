@@ -21,11 +21,18 @@ if ( ! class_exists( 'WP_Translations_Setup', false ) ) :
 	class WP_Translations_Setup {
 
 		public function __construct() {
+			$options = get_site_option( 'wp_translations_settings' ) ? get_site_option( 'wp_translations_settings' ) : array();
+			$auto_update = ! empty( $options ) ? (bool) $options['disable_update'] : false;
 
 			add_action( 'init',                  array( $this, 'translations_plugins_update' ) );
 			add_action( 'init',                  array( $this, 'translations_themes_update' ) );
 			add_filter( 'wp_get_update_data',    array( $this, 'translations_update_count' ) );
 			add_action( 'core_upgrade_preamble', array( $this, 'list_translations_update' ) );
+
+			if ( true === $auto_update ) {
+				add_filter( 'auto_update_translation',  '__return_false' );
+				add_filter( 'async_update_translation', '__return_false' );
+			}
 		}
 
 		public function translations_plugins_update() {

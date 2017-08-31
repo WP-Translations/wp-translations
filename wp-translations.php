@@ -112,8 +112,6 @@ if ( ! class_exists( 'WP_Translations' ) ) :
 			register_activation_hook( __FILE__,     array( $this, 'activation' ) );
 			add_action( 'plugins_loaded',           array( $this, 'load_textdomain' ) );
 			register_deactivation_hook( __FILE__,   array( $this, 'deactivation' ) );
-			add_filter( 'auto_update_translation',  '__return_false' );
-			add_filter( 'async_update_translation', '__return_false' );
 		}
 
 		/**
@@ -153,9 +151,11 @@ if ( ! class_exists( 'WP_Translations' ) ) :
 		 */
 		private function includes() {
 			global $wp_translations_options;
-			require_once WP_TRANSLATIONS_PLUGIN_DIR . 'includes/admin/class.settings-api.php';
-			require_once WP_TRANSLATIONS_PLUGIN_DIR . 'includes/admin/register-settings.php';
+			require_once WP_TRANSLATIONS_PLUGIN_DIR . 'includes/helper-functions.php';
+			require_once WP_TRANSLATIONS_PLUGIN_DIR . 'includes/translation-actions.php';
 			require_once WP_TRANSLATIONS_PLUGIN_DIR . 'includes/translation-functions.php';
+			require_once WP_TRANSLATIONS_PLUGIN_DIR . 'includes/admin/register-settings.php';
+			require_once WP_TRANSLATIONS_PLUGIN_DIR . 'includes/class-wp-translations-notices.php';
 			require_once WP_TRANSLATIONS_PLUGIN_DIR . 'includes/class-wp-translation-list-table.php';
 			require_once WP_TRANSLATIONS_PLUGIN_DIR . 'includes/class-wp-translations-setup.php';
 			require_once WP_TRANSLATIONS_PLUGIN_DIR . 'includes/class-wp-translations-plugins-lp-update.php';

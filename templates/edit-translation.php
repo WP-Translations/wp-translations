@@ -22,6 +22,6 @@ if ( ! isset( $_GET['textdomain'] ) ) {
 
 ?>
 <div class="wrap">
-	<h2><?php esc_html_e( 'Edit Translation settings', 'wp-translations' ); ?> - <a href="<?php echo esc_url( admin_url( 'admin.php?page=wp-translations-admin' ) ); ?>" class="add-new-h2"><span class="dashicons dashicons-arrow-left"></span> <?php esc_html_e( 'Back', 'wp-translations-updater' ); ?></a></h2>
+	<h2><?php esc_html_e( 'Edit Translation settings', 'wp-translations' ); ?> - <a href="<?php echo esc_url( get_plugin_page_url( 'admin.php?page=wp-translations-admin' ) ); ?>" class="add-new-h2"><span class="dashicons dashicons-arrow-left"></span> <?php esc_html_e( 'Back', 'wp-translations-updater' ); ?></a></h2>
 
 </div>
