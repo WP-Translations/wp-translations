@@ -41,7 +41,7 @@ function wp_translations_enqueue_admin_assets() {
 		'ajaxurl'             => admin_url( 'admin-ajax.php' ),
 		'nonce'               => wp_create_nonce( 'wpt-update-nonce' ),
 		'themes_translations' => $themes_translations,
-		'update_message'      => esc_html__( 'New translations are available:&nbsp;', 'wp-translations' )
+		'update_message'      => esc_html__( 'New translations are available:&nbsp;', 'wp-translations' ),
 	);
 
 	$wpt_update_core = array(
@@ -61,15 +61,7 @@ function wp_translations_enqueue_admin_assets() {
 
 	wp_register_script(
 		'wp-translations-admin-script',
-		WP_TRANSLATIONS_PLUGIN_URL . 'assets/js/wp-translations-admin-script.js',
-		array( 'jquery' ),
-		WP_TRANSLATIONS_VERSION,
-		false
-	);
-
-	wp_register_script(
-		'wp-translations-tabs',
-		WP_TRANSLATIONS_PLUGIN_URL . 'assets/js/jquery-accessible-tabs.js',
+		WP_TRANSLATIONS_PLUGIN_URL . 'assets/js/wp-translations-admin-script' . $js_ext,
 		array( 'jquery' ),
 		WP_TRANSLATIONS_VERSION,
 		false
@@ -77,22 +69,21 @@ function wp_translations_enqueue_admin_assets() {
 
 	wp_register_script(
 		'wp-translations-update-core',
-		WP_TRANSLATIONS_PLUGIN_URL . 'assets/js/wp-translations-update-core.js',
+		WP_TRANSLATIONS_PLUGIN_URL . 'assets/js/wp-translations-update-core' . $js_ext,
 		array( 'jquery' ),
 		WP_TRANSLATIONS_VERSION,
 		false
 	);
 
-	wp_enqueue_script( 'wp-translations-repetable-field' );
-
 	if ( isset( $current_screen ) && in_array( $current_screen->id, $allowed_screens, true ) ) {
 		wp_enqueue_style( 'wp-translations-admin-styles' );
 		wp_enqueue_script( 'wp-translations-admin-script' );
-		wp_enqueue_script( 'wp-translations-tabs' );
 		wp_localize_script( 'wp-translations-admin-script', 'wpt_update_ajax', $wpt_update_data );
 	}
 
-	if ( isset( $current_screen ) && 'update-core' === $current_screen->id ) {
+	$update_core_screen = is_multisite() ? 'update-core-network' : 'update-core';
+
+	if ( isset( $current_screen ) && $update_core_screen === $current_screen->id ) {
 		wp_enqueue_script( 'wp-translations-update-core' );
 		wp_localize_script( 'wp-translations-update-core', 'wpt_update_core', $wpt_update_core );
 	}
