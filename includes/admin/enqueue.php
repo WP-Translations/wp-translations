@@ -31,8 +31,11 @@ function wp_translations_enqueue_admin_assets() {
 	$current_screen = get_current_screen();
 	$allowed_screens = array(
 		'plugins',
+		'plugins-network',
 		'themes',
+		'themes-network',
 		'toplevel_page_wp-translations-admin',
+		'toplevel_page_wp-translations-admin-network',
 	);
 	$css_ext = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '.css' : '.min.css';
 	$js_ext  = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '.js' : '.min.js';
