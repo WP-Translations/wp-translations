@@ -88,7 +88,7 @@ if ( ! class_exists( 'WP_Translations_Setup', false ) ) :
 				require_once ABSPATH . 'wp-admin/includes/plugin.php';
 			}
 
-			$translations = wp_list_pluck( wp_get_translation_updates(), 'type', 'slug' );
+			$translations = wp_get_installed_translations( 'themes' );
 
 			$projects_list = wp_remote_get( 'https://raw.githubusercontent.com/WP-Translations/language-packs/master/wpts-projects.json' );
 			$projects = json_decode( wp_remote_retrieve_body( $projects_list ) );
@@ -107,8 +107,9 @@ if ( ! class_exists( 'WP_Translations_Setup', false ) ) :
 			}
 
 			foreach ( $translations as $slug => $type ) {
-				if ( 'theme' === $type && is_multisite() ) {
-					$notification = new WP_Translations_Themes_Notification( $slug, $themes[ $slug ]->get( 'TextDomain' ) );
+				if ( is_multisite() ) {
+					$stylesheet = wp_get_theme( $slug );
+					$notification = new WP_Translations_Themes_Notification( $slug, $stylesheet );
 				}
 			}
 

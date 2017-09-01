@@ -20,14 +20,14 @@ if ( ! class_exists( 'WP_Translations_Themes_Notification' ) ) :
 
 		public function __construct( $slug, $stylesheet ) {
 			$this->slug = $slug;
-			$this->$stylesheet = $stylesheet;
+			$this->stylesheet = $stylesheet;
 			$this->run();
 		}
 
 		protected function run() {
 			if ( is_multisite() ) {
-				remove_action( 'after_theme_row_' . $this->$stylesheet, 'wp_theme_update_row', 10 );
-				add_action( 'after_theme_row_' . $this->stylesheet, array( $this, 'show_update_notification' ), 10, 3 );
+				remove_action( 'after_theme_row_' . $this->slug, 'wp_theme_update_row', 10 );
+				add_action( 'after_theme_row_' . $this->slug, array( $this, 'show_update_notification' ), 10, 3 );
 			}
 		}
 
@@ -52,11 +52,13 @@ if ( ! class_exists( 'WP_Translations_Themes_Notification' ) ) :
 				return;
 			}
 
+			$allowed_themes = get_site_option( 'allowedthemes' );
+			$status       = ( in_array( $this->slug, array_keys( $allowed_themes ), true ) ) ? 'active' : 'inactive';
 			$count_lp     = count( $languages );
 			$message      = esc_html__( 'New translations are available:&nbsp;', 'wp-translations' );
 			$update_link  = '<button id="wp-translations-update-' . esc_attr( $this->slug ) . '" class="button-link" type="button" data-type="plugins" data-slug="' . esc_attr( $this->slug ) . '">Update now</button>';
 
-			echo '<tr class="plugin-update-tr wp-translations-update-row" id="' . esc_attr( $this->slug ) . '-update" data-slug="' . esc_attr( $this->slug ) . '" data-plugin="' . esc_attr( $file ) . '">';
+			echo '<tr class="plugin-update-tr wp-translations-update-row ' . esc_attr( $status ) . '" id="' . esc_attr( $this->slug ) . '-update" data-slug="' . esc_attr( $this->slug ) . '" data-plugin="' . esc_attr( $this->stylesheet ) . '">';
 			echo '<td colspan="3" class="plugin-update colspanchange">';
 			echo '<div class="update-message notice inline notice-warning notice-alt"><p>';
 			echo $message . implode( ',&nbsp;', $languages ) . '&nbsp;-&nbsp;' . $update_link;
