@@ -38,6 +38,9 @@ if ( ! class_exists( 'WP_Translations_Notices' ) ) :
 						case 'settings_updated':
 							$notices['updated']['wp-translations-settings-updated'] = __( 'Settings updated.', 'wp-translations' );
 							break;
+						case 'translation_updated':
+							$notices['updated']['wp-translations-settings-updated'] = __( 'Translation settings updated.', 'wp-translations' );
+							break;
 					}
 				}
 			}

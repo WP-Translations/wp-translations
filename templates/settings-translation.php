@@ -15,8 +15,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$options = get_site_option( 'wp_translations_settings' ) ? get_site_option( 'wp_translations_settings' ) : array();
-$auto_update = ! empty( $options ) ? (bool) $options['disable_update'] : false;
+$options       = get_site_option( 'wp_translations_settings' ) ? get_site_option( 'wp_translations_settings' ) : array();
+$auto_update   = ! empty( $options ) ? (bool) $options['disable_update'] : false;
+$repo_priority = ! empty( $options ) ? $options['repo_priority'] : false;
 
 ?>
 <div class="wrap">
@@ -34,6 +35,17 @@ $auto_update = ! empty( $options ) ? (bool) $options['disable_update'] : false;
 						<span class="description"><?php esc_html_e( 'By default the translations are updated at the same time as the plugins and themes.', 'wp-translations' ); ?></span>
 					</td>
 				</tr>
+				<tr>
+					<th scope="row" valign="top">
+						<label for="wp-translations-repo-priority"><?php esc_html_e( 'Select priority repository', 'wp-translations' ); ?></label>
+					</th>
+					<td>
+						<select name="wp_translations_settings[repo_priority]" id="wp-translations-repo-priority">
+							<option value="wordpress" <?php selected( $repo_priority, 'wordpress' ); ?>>WordPress</option>
+							<option value="wp-translations" <?php selected( $repo_priority, 'wp-translations' ); ?>>WP-Translations</option>
+						</select>
+					</td>
+				</tr>
 			</tbody>
 		</table>
 
@@ -45,3 +57,14 @@ $auto_update = ! empty( $options ) ? (bool) $options['disable_update'] : false;
 	</form>
 
 </div>
+
+<?php
+if ( true === WP_TRANSLATIONS_DEBUG ) {
+	echo '<pre>';
+		print_r( $options );
+	echo '</pre><hr>';
+	$updates = wp_get_translation_updates();
+	echo '<pre>';
+		print_r( $updates );
+	echo '</pre><hr>';
+}

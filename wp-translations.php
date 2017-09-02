@@ -125,6 +125,7 @@ if ( ! class_exists( 'WP_Translations' ) ) :
 
 			$this->define( 'WP_TRANSLATIONS_PLUGIN_NAME', 'WP-Translations' );
 			$this->define( 'WP_TRANSLATIONS_VERSION',     '1.0.0' );
+			$this->define( 'WP_TRANSLATIONS_DEBUG',       true );
 			$this->define( 'WP_TRANSLATIONS_PLUGIN_DIR',   plugin_dir_path( __FILE__ ) );
 			$this->define( 'WP_TRANSLATIONS_PLUGIN_URL',   plugin_dir_url( __FILE__ ) );
 			$this->define( 'WP_TRANSLATIONS_PLUGIN_FILE',  __FILE__ );

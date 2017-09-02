@@ -30,3 +30,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</form>
 	</div>
 </div><!-- /end .wrap -->
+<?php
+if ( true === WP_TRANSLATIONS_DEBUG ) {
+	$updates = wp_get_translation_updates();
+	echo '<pre>';
+		print_r( $updates );
+	echo '</pre>';
+}

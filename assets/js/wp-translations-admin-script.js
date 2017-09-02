@@ -48,7 +48,7 @@ jQuery( function( $ ) {
 			beforeSend: function(reponse) {
 
 					$( '[data-slug="'+ slug +'"]' ).addClass('updated');
-					$( '[data-slug="'+ slug +'"] .notice' ).addClass( 'updating-message' );
+					$( '[data-slug="'+ slug +'"] .wp-translations-notice' ).addClass( 'updating-message' );
 
 			},
 		})
@@ -56,7 +56,7 @@ jQuery( function( $ ) {
 		.done( function( response, textStatus, jqXHR ) {
 
 				$( '[data-slug="'+ slug +'"]' ).removeClass('updated');
-				$( '[data-slug="'+ slug +'"] .notice' ).removeClass( 'notice-warning updating-message' ).addClass( 'updated-message notice-success' ).html( response );
+				$( '[data-slug="'+ slug +'"] .wp-translations-notice' ).removeClass( 'notice-warning updating-message' ).addClass( 'updated-message notice-success' ).html( response );
 
 		});
 

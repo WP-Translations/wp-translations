@@ -39,12 +39,12 @@ if ( ! class_exists( 'WP_Translations_Themes_Notification' ) ) :
 		 */
 		public function show_update_notification( $stylesheet, $theme, $status ) {
 
-			$themes_updates = get_site_transient( 'update_themes' );
+			$themes_updates = wp_get_translation_updates();
 
 			$languages = array();
-			foreach ( $themes_updates->translations as $update ) {
-				if ( $update['slug'] === $this->slug ) {
-					$languages[] = $update['language'];
+			foreach ( $themes_updates as $update ) {
+				if ( $update->slug === $this->slug && 'theme' === $update->type ) {
+					$languages[] = $update->language;
 				}
 			}
 
@@ -60,7 +60,7 @@ if ( ! class_exists( 'WP_Translations_Themes_Notification' ) ) :
 
 			echo '<tr class="plugin-update-tr wp-translations-update-row ' . esc_attr( $status ) . '" id="' . esc_attr( $this->slug ) . '-update" data-slug="' . esc_attr( $this->slug ) . '" data-plugin="' . esc_attr( $this->stylesheet ) . '">';
 			echo '<td colspan="3" class="plugin-update colspanchange">';
-			echo '<div class="update-message notice inline notice-warning notice-alt"><p>';
+			echo '<div class="update-message wp-translations-notice notice inline notice-warning notice-alt"><p>';
 			echo $message . implode( ',&nbsp;', $languages ) . '&nbsp;-&nbsp;' . $update_link;
 
 			echo '</p></div></td></tr>';

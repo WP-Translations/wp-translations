@@ -61,3 +61,10 @@
   vertical-align: middle;
   margin-top: -2px;
 }
+
+.wp-translations-update-message p:before {
+  color: #f56e28;
+  content: "\f463";
+  display: inline-block;
+  font: normal 20px/1 'dashicons';
+}

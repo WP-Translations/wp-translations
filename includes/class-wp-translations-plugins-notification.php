@@ -58,7 +58,7 @@ if ( ! class_exists( 'WP_Translations_Plugins_Notification' ) ) :
 
 			echo '<tr class="plugin-update-tr ' . esc_attr( $status ) . ' wp-translations-update-row" id="' . esc_attr( $this->slug ) . '-update" data-slug="' . esc_attr( $this->slug ) . '" data-plugin="' . esc_attr( $file ) . '">';
 			echo '<td colspan="3" class="plugin-update colspanchange">';
-			echo '<div class="update-message notice inline notice-warning notice-alt"><p>';
+			echo '<div class="update-message wp-translations-notice notice inline notice-warning notice-alt"><p>';
 			echo $message . implode( ',&nbsp;', $languages ) . '&nbsp;-&nbsp;' . $update_link;
 
 			echo '</p></div></td></tr>';

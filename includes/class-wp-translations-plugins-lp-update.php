@@ -24,8 +24,8 @@ if ( ! class_exists( 'WP_Translations_Plugins_LP_Update' ) ) :
 		}
 
 		protected function run() {
-
 			add_filter( 'pre_set_site_transient_update_plugins', array( $this, 'pre_set_site_transient' ) );
+			add_filter( 'site_transient_update_plugins',         array( $this, 'check_repo_priority' ) );
 		}
 
 		public function pre_set_site_transient( $transient ) {
@@ -63,11 +63,55 @@ if ( ! class_exists( 'WP_Translations_Plugins_LP_Update' ) ) :
 
 			$transient->last_checked = current_time( 'timestamp' );
 			if ( ! empty( $transient->translations ) ) {
+
+				$options = get_site_option( 'wp_translations_settings' );
+				foreach ( $transient->translations as $key => $update ) {
+					if ( ! empty( $update->version ) && 'wordpress' != $options['repo_priority'] ) {
+						unset( $transient->translations[ $key ] );
+					}
+				}
+
 				$transient->translations = array_unique( $transient->translations, SORT_REGULAR );
 			}
 
 			return $transient;
 
+		}
+
+		public function check_repo_priority( $value ) {
+			$transient = (array) $value;
+			$updates   = array();
+			$excludes  = array();
+			$options   = get_site_option( 'wp_translations_settings' );
+
+			if ( isset( $transient['translations'] ) && ! empty( $transient['translations'] ) ) {
+				foreach ( $transient['translations'] as $key => $update ) {
+					if ( ! isset( $update['repo'] ) ) {
+						$transient['translations'][ $key ]['repo'] = 'wordpress';
+					}
+					$update['ID'] = $key;
+					$updates[ $update['slug'] ][ $update['language'] ][] = $update;
+				}
+
+				foreach ( $updates as $plugins ) {
+					foreach ( $plugins as $translations ) {
+						if ( 1 < count( $translations ) ) {
+							foreach ( $translations as $translation ) {
+								$repo_priority = ( isset( $options['textdomains'][ $translation['slug'] ]['repo_priority'] ) ) ? $options['textdomains'][ $translation['slug'] ]['repo_priority'] : $options['repo_priority'];
+								$translation['repo'] = ( isset( $translation['repo'] ) ) ? $translation['repo'] : 'wordpress';
+								if ( $repo_priority !== $translation['repo'] ) {
+									$excludes[] = $translation['ID'];
+								}
+							}
+						}
+					}
+				}
+
+				foreach ( $excludes as $exclude ) {
+					unset( $transient['translations'][ $exclude ] );
+				}
+			}
+			return (object) $transient;
 		}
 
 	}
