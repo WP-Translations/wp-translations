@@ -68,3 +68,49 @@
   display: inline-block;
   font: normal 20px/1 'dashicons';
 }
+
+.wp-translations-nav {
+  margin-top: 0;
+}
+
+.wp-translations-nav .filter-links {
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+}
+
+.wp-translations-nav .filter-links .current {
+  color: #13B09D;
+  border-color: #13B09D;
+}
+
+.wp-translations-nav,
+.wp-translations-header {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.wp-translations-header {
+  background: #0D5264;
+  padding: 12px;
+}
+
+.wp-translations-header img {
+  max-width: 33%;
+}
+
+.wp-translations-button-transifex {
+  padding: .5em 1em;
+  background: rgba(0, 0, 0, 0.1);
+  color: #13B09D;
+  border: 3px solid #13B09D;
+  font-weight: bold;
+  font-size: 1.3rem;
+}

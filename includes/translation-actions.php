@@ -39,7 +39,7 @@ add_action( 'admin_init', 'wp_translations_process_actions' );
 	* Saves settings
 	*
 	* @since 1.0
-	* @param array $data Project code data
+	* @param array $data settings post data
 	* @return void
 	*/
 function wp_translations_save_settings( $data ) {
@@ -48,8 +48,23 @@ function wp_translations_save_settings( $data ) {
 		wp_die( esc_html__( 'Trying to cheat or something?', 'wp-translations' ), esc_html__( 'Error', 'wp-translations' ), array( 'response' => 403 ) );
 	}
 	$options = get_site_option( 'wp_translations_settings' );
+
+	// UI
+	$options['core_updates']    = $data['wp_translations_settings']['core_updates'];
+	$options['plugins_updates'] = $data['wp_translations_settings']['plugins_updates'];
+	$options['themes_updates']  = $data['wp_translations_settings']['themes_updates'];
+	$options['bubble_count']    = $data['wp_translations_settings']['bubble_count'];
+	$options['page_hook']       = $data['wp_translations_settings']['page_hook'];
+
+	// Updates
 	$options['disable_update'] = $data['wp_translations_settings']['disable_update'];
+	$options['beta_update']    = $data['wp_translations_settings']['beta_update'];
+	$options['disable_update'] = $data['wp_translations_settings']['disable_update'];
+
+	// Repositories
+	$options['enable_repo']    = $data['wp_translations_settings']['enable_repo'];
 	$options['repo_priority']  = $data['wp_translations_settings']['repo_priority'];
+
 
 	update_site_option( 'wp_translations_settings', $options );
 	wp_redirect( add_query_arg( 'wp-translations-message', 'settings_updated' ) );

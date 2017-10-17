@@ -21,6 +21,10 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function wp_translations_enqueue_admin_assets() {
 
+	$options        = get_site_option( 'wp_translations_settings' ) ? get_site_option( 'wp_translations_settings' ) : array();
+	$enable_updates = ! empty( $options ) ? (bool) $options['themes_updates'] : false;
+	$core_updates = ! empty( $options ) ? (bool) $options['core_updates'] : false;
+
 	$themes_translations = array();
 	$themes_updates = get_site_transient( 'update_themes' );
 
@@ -35,7 +39,9 @@ function wp_translations_enqueue_admin_assets() {
 		'themes',
 		'themes-network',
 		'toplevel_page_wp-translations-admin',
+		'translations_page_wp-translations-settings',
 		'toplevel_page_wp-translations-admin-network',
+		'toplevel_page_wp-translations-settings-network',
 	);
 	$css_ext = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '.css' : '.min.css';
 	$js_ext  = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '.js' : '.min.js';
@@ -43,6 +49,7 @@ function wp_translations_enqueue_admin_assets() {
 	$wpt_update_data = array(
 		'ajaxurl'             => admin_url( 'admin-ajax.php' ),
 		'nonce'               => wp_create_nonce( 'wpt-update-nonce' ),
+		'enable_updates'      => $enable_updates,
 		'themes_translations' => $themes_translations,
 		'update_message'      => esc_html__( 'New translations are available:&nbsp;', 'wp-translations' ),
 	);
@@ -86,7 +93,7 @@ function wp_translations_enqueue_admin_assets() {
 
 	$update_core_screen = is_multisite() ? 'update-core-network' : 'update-core';
 
-	if ( isset( $current_screen ) && $update_core_screen === $current_screen->id ) {
+	if ( isset( $current_screen ) && $update_core_screen === $current_screen->id && true === $core_updates ) {
 		wp_enqueue_script( 'wp-translations-update-core' );
 		wp_localize_script( 'wp-translations-update-core', 'wpt_update_core', $wpt_update_core );
 	}

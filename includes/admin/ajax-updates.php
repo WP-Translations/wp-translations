@@ -36,17 +36,8 @@ function wp_translations_update_translations() {
 
 	include_once( ABSPATH . 'wp-admin/includes/class-wp-upgrader.php' );
 
-	$upgrader_args = array(
-		'url' => '',
-		'nonce' => '',
-		'title' => __( 'Translations' ),
-		'skip_header_footer' => true,
-	);
-	$upgrader = new Language_Pack_Upgrader( new Language_Pack_Upgrader_Skin( $upgrader_args ) );
+	$upgrader = new Language_Pack_Upgrader( new Language_Pack_Upgrader_Skin(  compact( 'url', 'nonce', 'title', 'context' ) ) );
 	$all_language_updates = wp_get_translation_updates();
-
-	$transient_type = 'update_' . $type;
-	$transient = get_site_transient( $transient_type );
 
 	$language_updates = array();
 	foreach ( $all_language_updates as $current_language_update ) {
@@ -54,18 +45,14 @@ function wp_translations_update_translations() {
 			$language_updates[] = $current_language_update;
 		}
 	}
+	$data = array(
+		'all'     => $all_language_updates,
+		'updates' => $language_updates,
+	);
 
-	$result = count( $language_updates ) === 0 ? false : $upgrader->bulk_upgrade( $language_updates );
-
-	foreach ( $transient->translations as $key => $update ) {
-		if ( $update['slug'] === $slug ) {
-			unset( $transient->translations[ $key ] );
-		}
-	}
-	$transient = set_site_transient( $transient_type, $transient );
+	$result = count( $language_updates ) == 0 ? false : $upgrader->bulk_upgrade( $language_updates, array( 'clear_update_cache' => false ) );
 
 	$count_items = ( count( $language_updates ) > 1 ) ? ( count( $language_updates ) - 1 ) : count( $language_updates );
-
 	if ( count( $language_updates ) > 1 ) {
 		for ( $i = 0; $i < $count_items; $i++ ) {
 			echo '<script type="text/javascript">
@@ -74,7 +61,6 @@ function wp_translations_update_translations() {
 							wp.updates.decrementCount( "translation" );
 						}
 					})( window.wp );
-
 				</script>';
 		}
 	}

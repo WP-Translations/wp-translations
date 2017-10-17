@@ -20,26 +20,25 @@ if ( ! isset( $_GET['textdomain'] ) ) {
 	wp_die( esc_html__( 'Something went wrong.', 'wp-translations' ), __( 'Error', 'wp-translations' ), array( 'response' => 400 ) );
 }
 
-$options       = get_site_option( 'wp_translations_settings' ) ? get_site_option( 'wp_translations_settings' ) : array();
-$auto_update   = ! empty( $options['textdomains'][ esc_attr( $_GET['textdomain'] ) ]['disable_update'] ) ? (bool) $options['textdomains'][ esc_attr( $_GET['textdomain'] ) ]['disable_update'] : false;
-$repo_priority = isset( $options['textdomains'][ esc_attr( $_GET['textdomain'] ) ]['repo_priority'] ) ? $options['textdomains'][ esc_attr( $_GET['textdomain'] ) ]['repo_priority'] : false;
-
+$options            = get_site_option( 'wp_translations_settings' ) ? get_site_option( 'wp_translations_settings' ) : array();
+$global_auto_update = ( isset( $options['disable_update'] ) ) ? $options['disable_update'] : false;
+$auto_update        = ! empty( $options['textdomains'][ esc_attr( $_GET['textdomain'] ) ]['disable_update'] ) ? (bool) $options['textdomains'][ esc_attr( $_GET['textdomain'] ) ]['disable_update'] : false;
+$repo_priority      = isset( $options['textdomains'][ esc_attr( $_GET['textdomain'] ) ]['repo_priority'] ) ? $options['textdomains'][ esc_attr( $_GET['textdomain'] ) ]['repo_priority'] : false;
 ?>
-<div class="wrap">
-	<h2><?php esc_html_e( 'Edit Translation settings', 'wp-translations' ); ?> - <a href="<?php echo esc_url( get_plugin_page_url( 'admin.php?page=wp-translations-admin' ) ); ?>" class="add-new-h2"><span class="dashicons dashicons-arrow-left"></span> <?php esc_html_e( 'Back', 'wp-translations-updater' ); ?></a></h2>
-
 	<form id="wp-translations-edit" action="" method="POST">
 		<table class="form-table">
 			<tbody>
+				<?php if ( false === $global_auto_update ) : ?>
 				<tr>
 					<th scope="row" valign="top">
-						<label for="wp-translations-disable-update"><?php esc_html_e( 'Disable translations auto-update', 'wp-translations' ); ?></label>
+						<label for="wp-translations-disable-update"><?php esc_html_e( 'Disable async update', 'wp-translations' ); ?></label>
 					</th>
 					<td>
 						<input name="wp_translations_repo[disable_update]" id="wp-translations-disable-update" type="checkbox" value="1" <?php checked( true, $auto_update ); ?>/>
 						<span class="description"><?php esc_html_e( 'By default the translations are updated at the same time as the plugins and themes.', 'wp-translations' ); ?></span>
 					</td>
 				</tr>
+				<?php endif; ?>
 				<tr>
 					<th scope="row" valign="top">
 						<label for="wp-translations-repo-priority"><?php esc_html_e( 'Select priority repository', 'wp-translations' ); ?></label>
@@ -61,7 +60,6 @@ $repo_priority = isset( $options['textdomains'][ esc_attr( $_GET['textdomain'] )
 			<input type="submit" value="<?php esc_html_e( 'Save', 'wp-translations' ); ?>" class="button-primary"/>
 		</p>
 	</form>
-</div>
 <?php
 if ( true === WP_TRANSLATIONS_DEBUG ) {
 	echo '<pre>';

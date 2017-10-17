@@ -21,15 +21,21 @@ if ( ! class_exists( 'WP_Translations_Setup', false ) ) :
 	class WP_Translations_Setup {
 
 		public function __construct() {
-			$options = get_site_option( 'wp_translations_settings' ) ? get_site_option( 'wp_translations_settings' ) : array();
-			$auto_update = ! empty( $options ) ? (bool) $options['disable_update'] : false;
+			$options      = get_site_option( 'wp_translations_settings' ) ? get_site_option( 'wp_translations_settings' ) : array();
+			$enable_repo  = ! empty( $options ) ? (bool) $options['enable_repo'] : false;
+			$core_updates = ! empty( $options ) ? (bool) $options['core_updates'] : false;
+			$bubble_count     = ! empty( $options ) ? (bool) $options['bubble_count'] : false;
 
 			add_action( 'init',                  array( $this, 'translations_plugins_update' ) );
 			add_action( 'init',                  array( $this, 'translations_themes_update' ) );
-			add_filter( 'wp_get_update_data',    array( $this, 'translations_update_count' ) );
-			add_action( 'core_upgrade_preamble', array( $this, 'list_translations_update' ) );
 
-			if ( true === $auto_update ) {
+			if ( true === $bubble_count ) {
+				add_filter( 'wp_get_update_data',    array( $this, 'translations_update_count' ) );
+			}
+			if ( true === $core_updates ) {
+				add_action( 'core_upgrade_preamble', array( $this, 'list_translations_update' ) );
+			}
+			if ( true === $enable_repo ) {
 				add_filter( 'auto_update_translation',  '__return_false' );
 				add_filter( 'async_update_translation', '__return_false' );
 			}
@@ -202,8 +208,7 @@ if ( ! class_exists( 'WP_Translations_Setup', false ) ) :
 				</tr>
 				</tfoot>
 			</table>
-		<?php
-		endif;
+		<?php endif;
 		}
 	}
 

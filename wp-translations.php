@@ -186,7 +186,20 @@ if ( ! class_exists( 'WP_Translations' ) ) :
 		 * @since 1.0.0
 		 */
 		public function activation() {
-
+			$defaults = array(
+				'core_updates'    => 1,
+				'plugins_updates' => 1,
+				'themes_updates'  => 1,
+				'bubble_count'    => 1,
+				'page_hook'       => 'menu',
+				'auto_update'     => 1,
+				'beta_update'     => '',
+				'beta_percent'    => '',
+				'enable_repo'     => 1,
+				'repo_priority'   => '',
+				'mo_cache'        => '',
+			);
+			add_site_option( 'wp_translations_settings', $defaults );
 		}
 
 		/**

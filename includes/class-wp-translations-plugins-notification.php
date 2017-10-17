@@ -25,9 +25,13 @@ if ( ! class_exists( 'WP_Translations_Plugins_Notification' ) ) :
 		}
 
 		protected function run() {
+			$options      = get_site_option( 'wp_translations_settings' ) ? get_site_option( 'wp_translations_settings' ) : array();
+			$plugins_updates = ! empty( $options ) ? (bool) $options['plugins_updates'] : false;
 
-			remove_action( 'after_plugin_row_' . $this->file, 'wp_plugin_update_row', 10 );
-			add_action( 'after_plugin_row_' . $this->file, array( $this, 'show_update_notification' ), 10, 3 );
+			if ( true === $plugins_updates ) {
+				remove_action( 'after_plugin_row_' . $this->file, 'wp_plugin_update_row', 10 );
+				add_action( 'after_plugin_row_' . $this->file, array( $this, 'show_update_notification' ), 10, 3 );
+			}
 		}
 
 		/**

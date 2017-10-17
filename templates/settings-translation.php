@@ -16,55 +16,39 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 $options       = get_site_option( 'wp_translations_settings' ) ? get_site_option( 'wp_translations_settings' ) : array();
-$auto_update   = ! empty( $options ) ? (bool) $options['disable_update'] : false;
-$repo_priority = ! empty( $options ) ? $options['repo_priority'] : false;
-
+$current_tab   = isset( $_GET['tab'] ) ? esc_attr( $_GET['tab'] ) : 'ui';
+$page          = get_plugin_page_url( 'admin.php?page=wp-translations-settings' );
+$current_screen = get_current_screen();
 ?>
-<div class="wrap">
-	<h2><?php esc_html_e( 'Settings', 'wp-translations' ); ?> - <a href="<?php echo esc_url( get_plugin_page_url( 'admin.php?page=wp-translations-admin' ) ); ?>" class="add-new-h2"><span class="dashicons dashicons-arrow-left"></span> <?php esc_html_e( 'Back', 'wp-translations-updater' ); ?></a></h2>
+	<div class="wp-filter wp-translations-nav">
+		<ul class="filter-links">
+			<li>
+				<a class="<?php echo  $active = 'ui' == $current_tab ? 'current' : ''; ?>" href="<?php echo esc_url( $page . '&tab=ui' ); ?>"><span class="dashicons dashicons-welcome-view-site"></span> <?php esc_html_e( 'Integration', 'wp-translations' ); ?></a>
+			</li>
+			<li>
+				<a class="<?php echo  $active = 'updates' == $current_tab ? 'current' : ''; ?>" href="<?php echo esc_url( $page . '&tab=updates' ); ?>"><span class="dashicons dashicons-update"></span> <?php esc_html_e( 'Updates', 'wp-translations' ); ?></a>
+			</li>
+			<li>
+				<a class="<?php echo  $active = 'repositories' == $current_tab ? 'current' : ''; ?>" href="<?php echo esc_url( $page . '&tab=repositories' ); ?>"><span class="dashicons dashicons-cloud"></span> <?php esc_html_e( 'Repositories', 'wp-translations' ); ?></a>
+			</li>
+			<li>
+				<a class="<?php echo  $active = 'performances' == $current_tab ? 'current' : ''; ?>" href="<?php echo esc_url( $page . '&tab=performances' ); ?>"><span class="dashicons dashicons-dashboard"></span> <?php esc_html_e( 'Performances', 'wp-translations' ); ?></a>
+			</li>
+		</ul>
+		<div class="search-form">
+			<a href="<?php echo esc_url( $page ); ?>" class="add-new-h2"><span class="dashicons dashicons-arrow-left"></span> <?php esc_html_e( 'Back', 'wp-translations-updater' ); ?></a>
+		</div>
+	</div>
 
-	<form id="wp-translations-settings" action="" method="POST">
-		<table class="form-table">
-			<tbody>
-				<tr>
-					<th scope="row" valign="top">
-						<label for="wp-translations-disable-update"><?php esc_html_e( 'Disable translations auto-update', 'wp-translations' ); ?></label>
-					</th>
-					<td>
-						<input name="wp_translations_settings[disable_update]" id="wp-translations-disable-update" type="checkbox" value="1" <?php checked( true, $auto_update ); ?>/>
-						<span class="description"><?php esc_html_e( 'By default the translations are updated at the same time as the plugins and themes.', 'wp-translations' ); ?></span>
-					</td>
-				</tr>
-				<tr>
-					<th scope="row" valign="top">
-						<label for="wp-translations-repo-priority"><?php esc_html_e( 'Select priority repository', 'wp-translations' ); ?></label>
-					</th>
-					<td>
-						<select name="wp_translations_settings[repo_priority]" id="wp-translations-repo-priority">
-							<option value="wordpress" <?php selected( $repo_priority, 'wordpress' ); ?>>WordPress</option>
-							<option value="wp-translations" <?php selected( $repo_priority, 'wp-translations' ); ?>>WP-Translations</option>
-						</select>
-					</td>
-				</tr>
-			</tbody>
-		</table>
+	<?php
+	settings_errors( 'wp-translations-notices' );
+	require_once WP_TRANSLATIONS_PLUGIN_DIR . '/templates/_settings_tab_' . $current_tab . '.php';
+	?>
 
-		<p class="submit">
-			<input type="hidden" name="wp-translations-action" value="save_settings"/>
-			<input type="hidden" name="wp-translations-settings-nonce" value="<?php echo wp_create_nonce( 'wp_translations_settings_nonce' ); ?>"/>
-			<input type="submit" value="<?php esc_html_e( 'Save Settings', 'wp-translations' ); ?>" class="button-primary"/>
-		</p>
-	</form>
-
-</div>
 
 <?php
 if ( true === WP_TRANSLATIONS_DEBUG ) {
 	echo '<pre>';
 		print_r( $options );
-	echo '</pre><hr>';
-	$updates = wp_get_translation_updates();
-	echo '<pre>';
-		print_r( $updates );
-	echo '</pre><hr>';
+	echo '</pre>';
 }

@@ -25,7 +25,10 @@ if ( ! class_exists( 'WP_Translations_Themes_Notification' ) ) :
 		}
 
 		protected function run() {
-			if ( is_multisite() ) {
+			$options        = get_site_option( 'wp_translations_settings' ) ? get_site_option( 'wp_translations_settings' ) : array();
+			$themes_updates = ! empty( $options ) ? (bool) $options['themes_updates'] : false;
+
+			if ( is_multisite() && true === $themes_updates ) {
 				remove_action( 'after_theme_row_' . $this->slug, 'wp_theme_update_row', 10 );
 				add_action( 'after_theme_row_' . $this->slug, array( $this, 'show_update_notification' ), 10, 3 );
 			}

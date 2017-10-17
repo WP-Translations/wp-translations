@@ -86,3 +86,44 @@
 	}
 
 }
+
+.wp-translations-nav {
+	margin-top: 0;
+
+	.filter-links {
+		flex: 1;
+
+		.current {
+			color: #13B09D;
+			border-color: #13B09D;
+
+		}
+
+	}
+}
+
+.wp-translations-nav,
+.wp-translations-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.wp-translations-header {
+
+	background: #0D5264;
+	padding: 12px;
+	img {
+		max-width: 33%;
+	}
+
+}
+
+.wp-translations-button-transifex {
+	padding: .5em 1em;
+	background: rgba( 0,0,0, .1 );
+	color: #13B09D;
+	border: 3px solid #13B09D;
+	font-weight: bold;
+	font-size: 1.3rem;
+}

@@ -1,33 +1,35 @@
 jQuery( function( $ ) {
 
 	$( function() {
+		if ( '1' ===wpt_update_ajax.enable_updates ) {
+			$( '.theme' ).each( function() {
 
-		$( '.theme' ).each( function() {
+					var slug = $(this).attr('data-slug');
 
-				var slug = $(this).attr('data-slug');
+					if( wpt_update_ajax.themes_translations.hasOwnProperty( slug ) ) {
 
-				if( wpt_update_ajax.themes_translations.hasOwnProperty( slug ) ) {
+						var langs = wpt_update_ajax['themes_translations'][''+slug+'']['updates'] + ' <button id="wp-translations-update-' + slug + '" class="button-link" type="button" data-type="themes" data-slug="' + slug + '">Update now</button>';
+						if ( $( '.theme[data-slug="'+ slug +'"] .notice' ).length ) {
+							$( '.theme[data-slug="'+ slug +'"] .notice').append( '<p>' + wpt_update_ajax.update_message + ' ' + langs + '</p>' );
+						} else {
+							$( '.theme[data-slug="'+ slug +'"]').append('<div class="wp-translations-notice update-message notice inline notice-warning notice-alt"><p>' +  wpt_update_ajax.update_message + '' + langs + '</p></div>');
+						}
 
-					var langs = wpt_update_ajax['themes_translations'][''+slug+'']['updates'] + ' <button id="wp-translations-update-' + slug + '" class="button-link" type="button" data-type="themes" data-slug="' + slug + '">Update now</button>';
-					if ( $( '.theme[data-slug="'+ slug +'"] .notice' ).length ) {
-						$( '.theme[data-slug="'+ slug +'"] .notice').append( '<p>' + wpt_update_ajax.update_message + ' ' + langs + '</p>' );
-					} else {
-						$( '.theme[data-slug="'+ slug +'"]').append('<div class="wp-translations-notice update-message notice inline notice-warning notice-alt"><p>' +  wpt_update_ajax.update_message + '' + langs + '</p></div>');
 					}
 
-				}
-
-		});
-
+			});
+		}
 	});
 
 	$( function() {
-		$( '.wp-translations-update-row' ).each( function() {
+		if ( '1' == wpt_update_ajax.enable_updates ) {
+			$( '.wp-translations-update-row' ).each( function() {
 
-			var list = $( this );
-			$( list ).prev().addClass('update');
+				var list = $( this );
+				$( list ).prev().addClass('update');
 
-		});
+			});
+		}
 	});
 
 	$( "[id^=wp-translations-update-]" ).live( "click", function(e) {
